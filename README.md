@@ -30,3 +30,9 @@ python go.py
 ```
 
 Crawled pages should be available in the /output directory.
+
+You should be able to view the site by going to:
+
+```
+http://localhost
+```

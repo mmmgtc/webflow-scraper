@@ -4,4 +4,4 @@ up:
 
 .PHONY: in
 in:
-	docker exec -it scraper.test /bin/bash
+	docker exec -it scraper-python.test /bin/bash
