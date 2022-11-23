@@ -30,7 +30,7 @@ def saveFullHtmlPage(url, pagepath='page', session=requests.Session(), html=None
         html = session.get(url).text
     soup = BeautifulSoup(html, "html.parser")
     path, _ = os.path.splitext(pagepath)
-    pagefolder = path+'/files' # page contents folder
+    pagefolder = path+'/assets' # page contents folder
     tags_inner = {'img': 'src', 'link': 'href', 'script': 'src'} # tag&inner tags to grab
     for tag, inner in tags_inner.items(): # saves resource files and rename refs
         savenRename(soup, pagefolder, session, url, tag, inner)
