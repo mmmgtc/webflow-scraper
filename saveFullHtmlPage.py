@@ -27,7 +27,9 @@ def saveFullHtmlPage(url, pagepath='page', session=requests.Session(), html=None
                 except Exception as exc:
                     print(exc, file=sys.stderr)
     if not html:
-        html = session.get(url).text
+        sessionData = session.get(url)
+        sessionData.encoding = 'utf-8'
+        html = sessionData.text
     soup = BeautifulSoup(html, "html.parser")
     path, _ = os.path.splitext(pagepath)
     pagefolder = path+'/assets' # page contents folder
