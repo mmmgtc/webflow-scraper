@@ -1,6 +1,7 @@
 import os, sys, re
 import requests
 from urllib.parse import urljoin
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 def saveFullHtmlPage(url, pagepath='page', session=requests.Session(), html=None):
@@ -8,6 +9,7 @@ def saveFullHtmlPage(url, pagepath='page', session=requests.Session(), html=None
         * pagepath : path-to-page   
         It will create a file  `'path-to-page'.html` and a folder `'path-to-page'_files`
     """
+
     def savenRename(soup, pagefolder, session, url, tag, inner):
         if not os.path.exists(pagefolder): # create only once
             os.mkdir(pagefolder)
@@ -16,13 +18,15 @@ def saveFullHtmlPage(url, pagepath='page', session=requests.Session(), html=None
                 try:
                     filename, ext = os.path.splitext(os.path.basename(res[inner])) # get name and extension
                     filename = re.sub('\W+', '', filename) + ext # clean special chars from name
+                    u = urlparse(filename)
+                    filename = u.path
                     fileurl = urljoin(url, res.get(inner))
                     filepath = os.path.join(pagefolder, filename)
                     # rename html ref so can move html and folder of files anywhere
                     res[inner] = os.path.join(os.path.basename(pagefolder), filename)
                     if not os.path.isfile(filepath): # was not downloaded
                         with open(filepath, 'wb') as file:
-                            filebin = session.get(fileurl)
+                            filebin = session.get(fileurl, timeout=10)
                             file.write(filebin.content)
                 except Exception as exc:
                     print(exc, file=sys.stderr)
